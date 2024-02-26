@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odoo project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Product Order Management</h1>
+        <div class="product">
+            <h2>Maize Flour</h2>
+            <p>Current Stock: <span id="stockLevel">100</span> kg</p>
+            <form id="orderForm">
+                <label for="quantity">Quantity to Order:</label>
+                <input type="number" id="quantity" name="quantity" min="1">
+                <button type="submit">Place Order</button>
+            </form>
+        </div>
+        <div class="order">
+            <h2>Order Summary</h2>
+            <p>Total Value: <span id="totalValue">0</span></p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
