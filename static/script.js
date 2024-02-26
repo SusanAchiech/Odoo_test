@@ -4,15 +4,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalValueElement = document.getElementById('totalValue');
     
     function updateStockLevel(){
-        fetch('/stock_level')
+        console.log("Updating stock level...");
+        fetch('/api/stock_level')
             .then(response => response.json())
-            .then(data => {stockLevelElement.textContent = data.stock_level});
+            .then(data => {console.log("Stock level data received:", data); stockLevelElement.textContent = data.stock_level});
     }
 
     function updateTotalValue(){
-        fetch('/total_value')
+        console.log("Updating total value...");
+        fetch('/api/total_value')
             .then(response => response.json())
-            .then(data => {totalValueElement.textContent = data.total_value});
+            .then(data => {console.log("Total value data received:", data); totalValueElement.textContent = data.total_value});
     }
 
     updateStockLevel();
@@ -22,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const quantity = parseInt(document.getElementById('quantity').value);
 
-        fetch('/order', {
+        fetch('/api/order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
+            console.log("Order response:", data);
             alert(data.message);
             updateStockLevel();
             updateTotalValue();

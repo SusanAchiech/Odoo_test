@@ -1,3 +1,8 @@
+from flask import Flask, jsonify, render_template, request
+
+app = Flask(__name__)
+
+# Define Product and Order classes
 class Product:
     def __init__(self, name, quantity_on_hand, unit_price):
         self.name = name
@@ -13,7 +18,7 @@ class Product:
         self.quantity_on_hand -= quantity
 
     def check_stock_level(self):
-        print(f"Current stock level for {self.name}: {self.quantity_on_hand}")
+        return self.quantity_on_hand
 
     def calculate_total_value(self):
         return self.quantity_on_hand * self.unit_price
@@ -40,17 +45,36 @@ class Order:
             total_value += product.calculate_total_value() * quantity
         return total_value
 
-# Define maize_flour
+# Define maize_flour and order
 maize_flour = Product("Maize Flour", 100, 100)
-
-# Use maize_flour in the Order
 order = Order()
-order.add_item(maize_flour, 10)
+order.add_item(maize_flour, 0)
 
-print(f"Stock level after order: {maize_flour.quantity_on_hand} kg")
-print(f"Total value of order: {order.calculate_total_value()}")
+# Define routes
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-order.remove_item(maize_flour)
+@app.route('/api/stock_level')
+def get_stock_level():
+    print("Fetching stock level...")
+    return jsonify({'stock_level': maize_flour.check_stock_level()})
 
-print(f"Stock level after order removal: {maize_flour.quantity_on_hand} kg")
-print(f"Total value after order removal: {order.calculate_total_value()}")
+@app.route('/api/order', methods=['POST'])
+def place_order():
+    data = request.get_json()
+    quantity = data['quantity']
+    try:
+        order.add_item(maize_flour, quantity)
+        print("Placing order for {quantity} units...")
+        return jsonify({'message': 'Order placed successfully'})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+
+@app.route('/api/total_value')
+def get_total_value():
+    print("Fetching total value...")
+    return jsonify({'total_value': order.calculate_total_value()})
+
+if __name__ == '__main__':
+    app.run(debug=True)
