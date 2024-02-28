@@ -71,6 +71,15 @@ def place_order():
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
 
+@app.route('/add_stock', methods=['POST'])
+def add_stock():
+  data = request.get_json()
+  quantity = data['quantity']
+
+  maize_flour.add_stock(quantity)
+  
+  return jsonify({'message': 'Stock added successfully'})
+
 @app.route('/api/total_value')
 def get_total_value():
     print("Fetching total value...")

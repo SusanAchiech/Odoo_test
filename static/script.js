@@ -20,6 +20,25 @@ document.addEventListener('DOMContentLoaded', function() {
     updateStockLevel();
     updateTotalValue();
 
+
+    // Add event listener for add stock button
+document.getElementById('addStockBtn').addEventListener('click', function() {
+
+    // Get quantity
+    const quantity = document.getElementById('addQuantityInput').value;
+  
+    // Make POST request to /add_stock endpoint
+    fetch('/add_stock', {
+      method: 'POST',
+      body: JSON.stringify({quantity}) 
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Update stock level
+      updateStockLevel();
+    });
+  
+  });
     orderFormElement.addEventListener('submit', function(event){
         event.preventDefault();
         const quantity = parseInt(document.getElementById('quantity').value);
