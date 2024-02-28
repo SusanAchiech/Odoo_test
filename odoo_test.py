@@ -20,9 +20,6 @@ class Product:
     def check_stock_level(self):
         return self.quantity_on_hand
 
-    def calculate_total_value(self):
-        return self.quantity_on_hand * self.unit_price
-
 class Order:
     def __init__(self):
         self.order_items = {}
@@ -42,11 +39,12 @@ class Order:
     def calculate_total_value(self):
         total_value = 0
         for product, quantity in self.order_items.items():
-            total_value += product.calculate_total_value() * quantity
+            total_value += quantity * product.unit_price  # Multiply by unit price
         return total_value
 
 # Define maize_flour and order
-maize_flour = Product("Maize Flour", 100, 100)
+maize_flour = Product("Maize Flour", 100, 100)  # 100 is the unit price
+
 order = Order()
 order.add_item(maize_flour, 0)
 
@@ -66,19 +64,17 @@ def place_order():
     quantity = data['quantity']
     try:
         order.add_item(maize_flour, quantity)
-        print("Placing order for {quantity} units...")
+        print(f"Placing order for {quantity} units...")
         return jsonify({'message': 'Order placed successfully'})
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
 
 @app.route('/add_stock', methods=['POST'])
 def add_stock():
-  data = request.get_json()
-  quantity = data['quantity']
-
-  maize_flour.add_stock(quantity)
-  
-  return jsonify({'message': 'Stock added successfully'})
+    data = request.get_json()
+    quantity = data['quantity']
+    maize_flour.add_stock(quantity)
+    return jsonify({'message': 'Stock added successfully'})
 
 @app.route('/api/total_value')
 def get_total_value():
