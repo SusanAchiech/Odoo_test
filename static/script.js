@@ -1,7 +1,11 @@
+//loading the html file
 document.addEventListener('DOMContentLoaded', function() {
+    //retrieving the stockLevel and totalValue elements
     const stockLevelElement = document.getElementById('stockLevel');
     const totalValueElement = document.getElementById('totalValue');
 
+    /*fetching the current stock level and updating
+    it with the request received in the response data */
     function updateStockLevel(){
         console.log("Updating stock level...");
         fetch('/api/stock_level')
@@ -11,7 +15,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 stockLevelElement.textContent = data.stock_level;
             });
     }
-
+    /*fetching the total value and update it with the 
+    value received */
     function updateTotalValue(){
         console.log("Updating total value...");
         fetch('/api/total_value')
@@ -22,10 +27,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    //populating the stockLevel and totalValue elements
     updateStockLevel();
     updateTotalValue();
 
+    //adding an  event listener for the "submit" event 
     document.getElementById('orderForm').addEventListener('submit', function(event){
+        //preventing the default form submission behaviour
         event.preventDefault();
         const orderQuantity = parseInt(document.getElementById('quantity').value);
         const addQuantity = parseInt(document.getElementById('add').value);
